@@ -1,0 +1,70 @@
+---
+title: "รายงานการวิเคราะห์ข้อมูลตัวอย่าง"
+author: "ชื่อของคุณ"
+date: "`r Sys.Date()`" # ใส่โค้ด R ง่ายๆ เพื่อแสดงวันที่ปัจจุบัน
+output:
+  html_document: # กำหนดรูปแบบ Output เป็น HTML
+    toc: true    # ให้สร้างสารบัญอัตโนมัติ
+    toc_depth: 2 # แสดงหัวข้อระดับ 1 และ 2 ในสารบัญ
+  word_document: # กำหนดรูปแบบ Output เป็น Word ด้วย
+    toc: true
+    toc_depth: 2
+  pdf_document:  # กำหนดรูปแบบ Output เป็น PDF ด้วย
+    toc: true
+    toc_depth: 2
+---
+
+## บทนำ
+
+เอกสารนี้แสดงขั้นตอนและผลลัพธ์ของการวิเคราะห์ข้อมูลตัวอย่างของเรา โดยใช้ภาษา R และจัดทำด้วย R Markdown
+
+## การเตรียมข้อมูล
+
+ในขั้นตอนนี้ เราจะสร้างชุดข้อมูลตัวอย่างขึ้นมาเพื่อใช้ในการวิเคราะห์
+
+```{r prepare_data}
+# โค้ด R: สร้าง Data Frame อย่างง่าย
+sample_data <- data.frame(
+  Category = c("A", "B", "A", "B", "A", "B"),
+  Value = c(15, 25, 20, 30, 18, 28)
+)
+
+# แสดง Data Frame ที่สร้างขึ้น
+sample_data
+
+# โค้ด R: คำนวณค่าเฉลี่ยแยกตาม Category
+# เราใช้ library dplyr สำหรับการจัดการข้อมูล
+library(dplyr)
+
+summary_data <- sample_data %>%
+  group_by(Category) %>%
+  summarise(Mean_Value = mean(Value))
+
+# แสดงผลลัพธ์
+summary_data
+
+# โค้ด R: สร้างกราฟแท่งด้วย ggplot2
+library(ggplot2)
+
+ggplot(summary_data, aes(x = Category, y = Mean_Value, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(title = "ค่าเฉลี่ย Value แยกตาม Category",
+       x = "Category",
+       y = "ค่าเฉลี่ย Value") +
+  theme_minimal()
+```
+
+
+## การใช้ Inline Code
+
+เราสามารถคำนวณค่าทางคณิตศาสตร์ง่ายๆ ในบรรทัดข้อความได้เลยค่ะ/ครับ เช่น ผลรวมของ 5 และ 10 คือ `r 5 + 10`
+
+หรือเราสามารถแสดงค่าของตัวแปรที่เราสร้างไว้ใน Code Chunk ก่อนหน้านี้ได้ด้วยค่ะ/ครับ
+
+จากขั้นตอน "การวิเคราะห์เบื้องต้น" เราได้คำนวณค่าเฉลี่ยของ `summary_data$Mean_Value` ไว้
+
+ค่าเฉลี่ยของ Category A คือ `r summary_data$Mean_Value[summary_data$Category == "A"]` และค่าเฉลี่ยของ Category B คือ `r summary_data$Mean_Value[summary_data$Category == "B"]`
+
+เราสามารถคำนวณผลรวมของค่าเฉลี่ยทั้งสอง Category ได้เท่ากับ `r sum(summary_data$Mean_Value)`
+
+จำนวนแถวทั้งหมดใน Data Frame `sample_data` คือ `r nrow(sample_data)` แถว
